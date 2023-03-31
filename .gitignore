@@ -1,0 +1,15 @@
+# package directories
+node_modules
+jspm_packages
+
+# Serverless directories
+.serverless
+
+# environment variables
+.env
+
+# build directories
+.build
+
+# .github directories
+.github

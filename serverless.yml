@@ -1,0 +1,65 @@
+service: test
+frameworkVersion: "3"
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-southeast-2
+  environment:
+    MY_AWS_ACCESS_KEY_ID: ${env:MY_AWS_ACCESS_KEY_ID}
+    MY_AWS_SECRET_ACCESS_KEY: ${env:MY_AWS_SECRET_ACCESS_KEY}
+
+functions:
+  pushEventHandler:
+    handler: src/handler.pushEventHandler
+    events:
+      - eventBridge:
+          pattern:
+            source:
+              - "aws.codecommit"
+            detail-type:
+              - "CodeCommit Repository State Change"
+            detail:
+              event:
+                - "referenceCreated"
+                - "referenceUpdated"
+  auth:
+    handler: src/auth.main
+    events:
+      - http:
+          path: /auth
+          method: post
+          cors: true
+  add:
+    handler: src/add.main
+    events:
+      - http:
+          path: /add
+          method: post
+          cors: true
+  get:
+    handler: src/get.main
+    events:
+      - http:
+          path: /get
+          method: post
+          cors: true
+  delete:
+    handler: src/delete.main
+    events:
+      - http:
+          path: /delete
+          method: post
+          cors: true
+  recommend:
+    handler: src/recommend.main
+    events:
+      - http:
+          path: /recommend
+          method: post
+          cors: true
